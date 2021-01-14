@@ -3,7 +3,6 @@ import {
   Arg,
   Ctx,
   Field,
-  InputType,
   Mutation,
   ObjectType,
   Query,
@@ -11,6 +10,7 @@ import {
 } from "type-graphql";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
+import { UserInput } from "./user-input"
 
 @ObjectType()
 class FieldError {
@@ -20,19 +20,6 @@ class FieldError {
   @Field()
   message: String;
 }
-
-@InputType()
-class UserInput {
-  @Field(() => String)
-  username!: string;
-
-  @Field(() => String, { nullable: true })
-  email?: string;
-
-  @Field(() => String)
-  password!: string;
-}
-
 @ObjectType()
 class UserResponse {
   @Field(() => [FieldError], { nullable: true })
@@ -78,7 +65,19 @@ export class UserResolver {
       email: options.email,
       password: hash,
     });
-    await em.persistAndFlush(user);
+
+    try {
+      await em.persistAndFlush(user);
+    } catch (err) {
+      if (err.code === "23505") {
+        return {
+          errors: [{
+            field: "username",
+            message: "username or email already exists"
+          }]
+        }
+      }
+    }
 
     return {user};
   }
