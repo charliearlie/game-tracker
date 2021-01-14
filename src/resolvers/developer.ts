@@ -8,6 +8,7 @@ export class DeveloperResolver {
   developers(@Ctx() { em }: MyContext): Promise<Developer[]> {
     return em.find(Developer, {});
   }
+
   @Query(() => Developer, { nullable: true })
   developer(
     @Arg("id", () => Int) id: number,
@@ -15,6 +16,7 @@ export class DeveloperResolver {
   ): Promise<Developer | null> {
     return em.findOne(Developer, { id });
   }
+
   @Mutation(() => Developer)
   async createDeveloper(
     @Arg("title", () => String) title: string,
@@ -25,6 +27,7 @@ export class DeveloperResolver {
 
     return developer;
   }
+
   @Mutation(() => Developer, { nullable: true })
   async updateDeveloper(
     @Arg("id") id: number,
@@ -42,5 +45,14 @@ export class DeveloperResolver {
     }
 
     return developer;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteDeveloper(
+      @Arg("id") id: number,
+      @Ctx() { em }: MyContext
+  ): Promise<boolean> {
+     await em.nativeDelete(Developer, { id })
+      return true;
   }
 }

@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property, ManyToOne, ManyToMany, Collection } from "@mikro-orm/core";
+import { Entity, PrimaryKey, Property, ManyToOne, ManyToMany, Collection, OneToMany } from "@mikro-orm/core";
 import { Publisher } from "./Publisher";
 import { Developer } from "./Developer"
 import { Trophy } from "./Trophy";
@@ -24,6 +24,6 @@ export class Game {
   @ManyToMany(() => Developer) // owning side can be simple as this!
   developers = new Collection<Developer>(this);
 
-  @ManyToOne(() => Trophy)
+  @OneToMany(() => Trophy, (trophy: Trophy) => trophy.game)
   trophies = new Collection<Trophy>(this);
 }

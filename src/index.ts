@@ -6,16 +6,18 @@ import { buildSchema } from "type-graphql";
 import mikroConfig from "./mikro-orm.config";
 import {__prod__} from "./constants";
 import { DeveloperResolver } from "./resolvers/developer";
+import { UserResolver } from "./resolvers/user";
 
 const main = async () => {
-  const orm = await MikroORM.init(mikroConfig);
+  try {
+    const orm = await MikroORM.init(mikroConfig);
   
-  // orm.getMigrator().up()
+  orm.getMigrator().up()
   const app = express();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [DeveloperResolver],
+      resolvers: [DeveloperResolver, UserResolver],
       validate: false
     }),
     context: () => ({
@@ -32,6 +34,9 @@ const main = async () => {
   app.listen(7777, () => {
     console.log("Server listening on port localhost:7777")
   })
+  } catch (error) {
+    console.error(error)
+  }
 };
 
 main();
