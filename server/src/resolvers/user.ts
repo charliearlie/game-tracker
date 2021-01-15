@@ -47,7 +47,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async register(
-    @Ctx() { em }: MyContext,
+    @Ctx() { em, req }: MyContext,
     @Arg("options") options: UserInput
   ): Promise<UserResponse> {
     if (options.username.length < 2) {
@@ -93,6 +93,8 @@ export class UserResolver {
         };
       }
     }
+
+    req.session.userId = user.id;
 
     return { user };
   }
