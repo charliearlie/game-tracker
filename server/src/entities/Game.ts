@@ -1,11 +1,18 @@
-import { Entity, PrimaryKey, Property, ManyToOne, ManyToMany, Collection, OneToMany } from "@mikro-orm/core";
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  ManyToOne,
+  ManyToMany,
+  Collection,
+  OneToMany,
+} from "@mikro-orm/core";
 import { Publisher } from "./Publisher";
-import { Developer } from "./Developer"
+import { Developer } from "./Developer";
 import { Trophy } from "./Trophy";
 
 @Entity()
 export class Game {
-
   @PrimaryKey()
   id!: number;
 

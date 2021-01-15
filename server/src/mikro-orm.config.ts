@@ -1,4 +1,4 @@
-import {MikroORM } from "@mikro-orm/core"
+import { MikroORM } from "@mikro-orm/core";
 import path from "path";
 
 import { __prod__ } from "./constants";
@@ -14,8 +14,7 @@ export default {
     pattern: /^[\w-]+\d+\.[tj]s$/,
   },
   entities: [Game, Trophy, Developer, Publisher, User],
-  dbName:"ps-trophies",
+  dbName: "ps-trophies",
   type: "postgresql",
-  debug: !__prod__
+  debug: !__prod__,
 } as Parameters<typeof MikroORM.init>[0];
-

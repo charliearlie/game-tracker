@@ -49,10 +49,10 @@ export class DeveloperResolver {
 
   @Mutation(() => Boolean)
   async deleteDeveloper(
-      @Arg("id") id: number,
-      @Ctx() { em }: MyContext
+    @Arg("id") id: number,
+    @Ctx() { em }: MyContext
   ): Promise<boolean> {
-     await em.nativeDelete(Developer, { id })
-      return true;
+    await em.nativeDelete(Developer, { id });
+    return true;
   }
 }

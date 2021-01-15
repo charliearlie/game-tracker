@@ -34,9 +34,9 @@ const main = async () => {
           maxAge: 1000 * 60 * 60 * 24 * 365,
           httpOnly: true,
           sameSite: "lax",
-          secure: __prod__
+          secure: __prod__,
         },
-        saveUninitialize:false,
+        saveUninitialize: false,
         secret: "bananas",
         resave: false,
       })
@@ -47,10 +47,10 @@ const main = async () => {
         resolvers: [DeveloperResolver, UserResolver],
         validate: false,
       }),
-      context: ({req, res }): MyContext => ({
+      context: ({ req, res }): MyContext => ({
         em: orm.em,
         req,
-        res
+        res,
       }),
     });
 

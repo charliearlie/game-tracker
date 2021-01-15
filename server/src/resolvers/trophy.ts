@@ -51,10 +51,10 @@ export class TrophyResolver {
 
   @Mutation(() => Boolean)
   async deleteTrophy(
-      @Arg("id") id: number,
-      @Ctx() { em }: MyContext
+    @Arg("id") id: number,
+    @Ctx() { em }: MyContext
   ): Promise<boolean> {
-     await em.nativeDelete(Trophy, { id })
-      return true;
+    await em.nativeDelete(Trophy, { id });
+    return true;
   }
 }

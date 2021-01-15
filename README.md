@@ -1,2 +1,3 @@
 # playstation-trophies
-A website to track Playstation trophies. 
+
+A website to track Playstation trophies.

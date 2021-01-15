@@ -4,7 +4,6 @@ import { Field, Int, ObjectType } from "type-graphql";
 @ObjectType()
 @Entity()
 export class Developer {
-
   @Field(() => Int)
   @PrimaryKey()
   id!: number;
@@ -12,5 +11,4 @@ export class Developer {
   @Field(() => String)
   @Property()
   title!: string;
-
 }
