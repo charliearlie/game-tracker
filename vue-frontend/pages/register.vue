@@ -1,7 +1,7 @@
 <template>
   <c-box p="32px">
     <c-text fontSize="4xl" :text-align="'center'">Register</c-text>
-    <form @submit.prevent="registerUser" class="form">
+    <form v-if="!isLoggedIn" @submit.prevent="registerUser" class="form">
       <c-form-control is-required>
         <c-form-label for="username">Username</c-form-label>
         <c-input
@@ -61,6 +61,7 @@
         >Register</c-button
       >
     </form>
+    <h3 v-if="isLoggedIn">You're logged in. Why are you here?</h3>
     <p v-if="me">{{ me.email }}</p>
   </c-box>
 </template>
@@ -125,6 +126,11 @@ export default {
           },
         })
       }
+    },
+  },
+  computed: {
+    isLoggedIn: function () {
+      return this.me?.email ? true : false
     },
   },
 }
