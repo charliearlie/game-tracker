@@ -42,7 +42,7 @@ const main = async () => {
           sameSite: "lax",
           secure: __prod__,
         },
-        saveUninitialize: false,
+        saveUninitialized: false,
         secret: "bananas",
         resave: false,
       })
