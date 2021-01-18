@@ -56,16 +56,16 @@
           size="lg"
         />
       </c-form-control>
-      <button>Register</button>
-      <!-- <c-button
+      <c-button
         my="16px"
         backgroundColor="indigo.300"
         color="white"
         size="lg"
         width="100%"
         variant="solid"
+        @click="registerUser"
         >Register</c-button
-      > -->
+      >
     </form>
     <c-link as="router-link" to="/login">Already registered?</c-link>
     <h3 v-if="isLoggedIn">You're logged in. Why are you here?</h3>

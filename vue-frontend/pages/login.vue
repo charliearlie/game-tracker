@@ -41,6 +41,7 @@
         size="lg"
         width="100%"
         variant="solid"
+        @click="logUserIn"
         >Login</c-button
       >
     </form>
@@ -61,7 +62,9 @@ export default {
     }
   },
   methods: {
-    registerUser() {
+    logUserIn() {
+      console.log(this.username)
+      console.log(this.password)
       this.$apollo.mutate({
         mutation: login,
         variables: {
