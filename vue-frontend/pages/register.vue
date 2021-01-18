@@ -85,6 +85,7 @@ import gql from 'graphql-tag'
 import { register } from '../resolvers/mutations/register'
 export default {
   name: 'Register',
+  transition: 'slide-fade',
   apollo: {
     me: gql`
       query {
@@ -133,5 +134,17 @@ export default {
 <style lang="scss">
 .heading {
   transform: rotate(-10deg);
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(50px);
+  opacity: 0;
 }
 </style>
