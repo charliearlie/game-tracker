@@ -5,6 +5,13 @@
         >Login</c-heading
       >
     </div>
+    <c-text
+      v-for="error in errors"
+      :key="error.field"
+      color="red.500"
+      fontWeight="bold"
+      >{{ error.message }}</c-text
+    >
     <form v-if="!isLoggedIn" @submit.prevent="loginUser">
       <c-form-control is-required my="8px">
         <c-form-label for="username">Username or email</c-form-label>
@@ -59,19 +66,20 @@ export default {
       username: '',
       password: '',
       showPassword: false,
+      errors: [],
     }
   },
   methods: {
-    logUserIn() {
-      console.log(this.username)
-      console.log(this.password)
-      this.$apollo.mutate({
+    async logUserIn() {
+      const res = await this.$apollo.mutate({
         mutation: login,
         variables: {
           username: this.username,
           password: this.password,
         },
       })
+
+      this.errors = res.data.login.errors
     },
   },
   computed: {

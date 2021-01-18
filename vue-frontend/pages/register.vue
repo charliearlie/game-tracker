@@ -5,6 +5,13 @@
         >Register</c-heading
       >
     </div>
+    <c-text
+      v-for="error in errors"
+      :key="error.field"
+      color="red.500"
+      fontWeight="bold"
+      >{{ error.message }}</c-text
+    >
     <form v-if="!isLoggedIn" @submit.prevent="registerUser">
       <c-form-control is-required my="8px">
         <c-form-label for="username">Username</c-form-label>
@@ -94,13 +101,14 @@ export default {
       password: '',
       confirmPassword: '',
       showPassword: false,
+      errors: [],
     }
   },
   methods: {
-    registerUser() {
+    async registerUser() {
       console.log('here')
       if (this.password === this.confirmPassword) {
-        this.$apollo.mutate({
+        const res = await this.$apollo.mutate({
           mutation: register,
           variables: {
             username: this.username,
@@ -108,6 +116,9 @@ export default {
             password: this.password,
           },
         })
+
+        this.errors = res.data.register.errors
+        console.log(res.data.register)
       }
     },
   },
