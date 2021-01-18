@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
 import express from "express";
-const redis = require("redis");
+import Redis from "ioredis";
 const session = require("express-session");
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -13,6 +13,7 @@ import { __prod__ } from "./constants";
 import { DeveloperResolver } from "./resolvers/developer";
 import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
+import { sendEmail } from "./util/send-email";
 
 const main = async () => {
   try {
@@ -22,18 +23,19 @@ const main = async () => {
     const app = express();
 
     const RedisStore = connectRedis(session);
-    const redisClient = redis.createClient();
-
-    app.use(cors({
-      origin: "http://localhost:3000",
-      credentials: true,
-    }))
+    const redis = new Redis();
+    app.use(
+      cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+      })
+    );
 
     app.use(
       session({
         name: "qid",
         store: new RedisStore({
-          client: redisClient,
+          client: redis,
           disableTouch: true,
         }),
         cookie: {
@@ -57,6 +59,7 @@ const main = async () => {
         em: orm.em,
         req,
         res,
+        redis,
       }),
     });
 

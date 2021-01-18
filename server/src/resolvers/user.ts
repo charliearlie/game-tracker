@@ -8,9 +8,11 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
+import { v4 as uuidv4 } from "uuid";
 import { MyContext } from "../types";
 import { User } from "../entities/User";
 import { UserInput } from "./user-input";
+import { sendEmail } from "../util/send-email";
 
 @ObjectType()
 class FieldError {
@@ -133,5 +135,25 @@ export class UserResolver {
     req.session.userId = user.id;
 
     return { user };
+  }
+
+  @Mutation(() => Boolean)
+  async forgotPassword(
+    @Ctx() { em, redis }: MyContext,
+    @Arg("email") email: string
+  ) {
+    const user = await em.findOne(User, { email });
+
+    if (!user) {
+      return true;
+    }
+
+    const token = uuidv4();
+
+    await redis.set("forgot-password:" + token, user.id, "ex", 1000 * 60 * 60);
+
+    const anchor = `<a href="http://localhost:3000/change-password/${token}">Change your password</a>`;
+    sendEmail(email, anchor);
+    return true;
   }
 }
