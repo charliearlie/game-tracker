@@ -41,6 +41,7 @@
           </c-input-right-element>
         </c-input-group>
       </c-form-control>
+      <c-link as="router-link" to="/forgot-password">Forgot password?</c-link>
       <c-button
         my="16px"
         backgroundColor="indigo.300"
