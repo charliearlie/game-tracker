@@ -17,7 +17,7 @@
         />
       </c-form-control>
       <c-button
-        @click="logUserIn"
+        @click="sendEmail"
         backgroundColor="indigo.300"
         color="white"
         left-icon="email"
@@ -34,9 +34,9 @@
 
 <script>
 import gql from 'graphql-tag'
-import { login } from '../resolvers/mutations/login'
+import { forgotPassword } from '../resolvers/mutations/reset-password'
 export default {
-  name: 'Login',
+  name: 'ForgotPassword',
   data() {
     return {
       email: '',
@@ -46,13 +46,13 @@ export default {
   methods: {
     async sendEmail() {
       const res = await this.$apollo.mutate({
-        mutation: login,
+        mutation: forgotPassword,
         variables: {
           email: this.email,
         },
       })
 
-      this.errors = res.data.login.errors
+      console.log(res.data)
     },
   },
 }

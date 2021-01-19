@@ -13,7 +13,6 @@ import { __prod__ } from "./constants";
 import { DeveloperResolver } from "./resolvers/developer";
 import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
-import { sendEmail } from "./util/send-email";
 
 const main = async () => {
   try {

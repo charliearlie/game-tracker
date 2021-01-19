@@ -104,29 +104,85 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Ctx() { em, req }: MyContext,
-    @Arg("options") options: UserInput
+    @Arg("userNameOrEmail") userNameOrEmail: string,
+    @Arg("password") password: string
   ): Promise<UserResponse> {
-    const user = await em.findOne(User, {
-      username: options.username.toLowerCase(),
-    });
+    let user = null;
+    if (userNameOrEmail.includes("@")) {
+      user = await em.findOne(User, {
+        email: userNameOrEmail.toLowerCase(),
+      });
+    } else {
+      user = await em.findOne(User, {
+        username: userNameOrEmail.toLowerCase(),
+      });
+    }
 
     if (!user) {
       return {
         errors: [
           {
             field: "username",
-            message: "username doesn't exist",
+            message: "username or email doesn't exist",
           },
         ],
       };
     }
-    const validPassword = await argon2.verify(user.password, options.password);
+    const validPassword = await argon2.verify(user.password, password);
     if (!validPassword) {
       return {
         errors: [
           {
             field: "password",
             message: "Password is incorrect",
+          },
+        ],
+      };
+    }
+
+    req.session.userId = user.id;
+
+    return { user };
+  }
+
+  @Mutation(() => Boolean)
+  async magicLink(
+    @Ctx() { req, em, redis }: MyContext,
+    @Arg("email") email: string
+  ): Promise<Boolean> {
+    const user = await em.findOne(User, { email });
+
+    if (!user) {
+      return false;
+    }
+
+    const token = uuidv4();
+
+    await redis.set("magic-link:" + token, user.id, "ex", 1000 * 60 * 60);
+
+    const anchor = `<a href="http://localhost:3000/logged-in/${token}">Log in to site</a>`;
+    sendEmail(email, anchor);
+    return true;
+  }
+
+  @Mutation(() => UserResponse)
+  async loginWithToken(
+    @Ctx() { req, em, redis }: MyContext,
+    @Arg("token") token: string
+  ) {
+    const userId = await redis.get("magic-link:" + token);
+    if (!userId) {
+      return { errors: [{ field: "token", message: "This token is invalid" }] };
+    }
+
+    const user = await em.findOne(User, { id: Number(userId) });
+
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "user",
+            message: "User this token belongs to no longer exists",
           },
         ],
       };
