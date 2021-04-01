@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
 import { login } from '../resolvers/mutations/login'
 import { magicLink } from '../resolvers/mutations/magic-link'
 export default {
@@ -99,7 +98,7 @@ export default {
     },
     async sendMagicLink() {
       this.loading = true
-      const res = await this.$apollo.mutate({
+      await this.$apollo.mutate({
         mutation: magicLink,
         variables: {
           usernameOrEmail: this.usernameOrEmail,

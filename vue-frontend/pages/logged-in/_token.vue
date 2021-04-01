@@ -32,8 +32,7 @@ export default {
       },
     })
 
-    this.user = res.data?.loginWithToken?.user?.email
-    console.log(this.$route?.params?.token)
+    this.user = res.data?.loginWithToken?.user?.email;
   },
 }
 </script>

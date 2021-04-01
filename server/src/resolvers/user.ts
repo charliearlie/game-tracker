@@ -147,7 +147,7 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   async magicLink(
-    @Ctx() { req, em, redis }: MyContext,
+    @Ctx() { em, redis }: MyContext,
     @Arg("email") email: string
   ): Promise<Boolean> {
     const user = await em.findOne(User, { email });
